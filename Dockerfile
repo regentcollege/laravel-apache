@@ -23,7 +23,7 @@ RUN composer global require "laravel/envoy=~1.0"
 #RUN chown www-data: /var/www/current -R && \
 #    chmod 0755 /var/www/current -R
 RUN cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/laravel.conf && \
-    sed -i 's,/var/www/html,/var/www/public,g' /etc/apache2/sites-available/laravel.conf && \
+    sed -i 's,/var/www/html,/var/www/current/public,g' /etc/apache2/sites-available/laravel.conf && \
     sed -i 's,${APACHE_LOG_DIR},/var/log/apache2,g' /etc/apache2/sites-available/laravel.conf && \
     a2ensite laravel.conf && a2dissite 000-default.conf && a2enmod rewrite
 	
