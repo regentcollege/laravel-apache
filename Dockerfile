@@ -1,27 +1,33 @@
 # Set the base image for subsequent instructions
-FROM php:7.1-apache
+FROM php:7.3-apache
 
-# Update packages
-RUN apt-get update
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    unzip \
+    git \
+    curl \
+    default-mysql-client \
+    libzip-dev
 
-# Install PHP and composer dependencies
-RUN apt-get install -qq git curl libmcrypt-dev libjpeg-dev libpng-dev libfreetype6-dev libbz2-dev
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Clear out the local repository of retrieved package files
-RUN apt-get clean
-
-# Install needed extensions
-# Here you can install any other extension that you need during the test and deployment process
-RUN docker-php-ext-install mcrypt pdo_mysql zip
+# Install extensions
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
+RUN docker-php-ext-install gd
 
 # Install Composer
 RUN curl --silent --show-error https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install Laravel Envoy
-RUN composer global require "laravel/envoy=~1.0"
-
-#RUN chown www-data: /var/www/current -R && \
-#    chmod 0755 /var/www/current -R
 RUN cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/laravel.conf && \
     sed -i 's,/var/www/html,/var/www/apply/current/public,g' /etc/apache2/sites-available/laravel.conf && \
     sed -i 's,${APACHE_LOG_DIR},/var/log/apache2,g' /etc/apache2/sites-available/laravel.conf && \
@@ -31,3 +37,4 @@ RUN cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-availabl
 WORKDIR /var/www
 
 EXPOSE 80
+CMD ["apache2-foreground"]
