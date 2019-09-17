@@ -18,7 +18,8 @@ RUN apt-get update && pecl install redis && apt-get install -y \
     libzip-dev \
     zlib1g-dev \
     libicu-dev \
-    g++
+    g++ \
+    supervisor
 
 	
 # Clear cache
@@ -31,11 +32,13 @@ RUN docker-php-ext-install gd && docker-php-ext-enable opcache redis
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 
+## Configure Supervisor to monitor and restart Laravel queues
+COPY supervisord.conf /etc/supervisord.conf
+
+ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Install Composer
-RUN curl --silent --show-error https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/laravel.conf && \
     sed -i 's,/var/www/html,/var/www/apply/current/public,g' /etc/apache2/sites-available/laravel.conf && \
