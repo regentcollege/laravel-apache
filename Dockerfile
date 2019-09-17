@@ -32,7 +32,7 @@ RUN docker-php-ext-install gd && docker-php-ext-enable opcache redis
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 
-## Configure Supervisor to monitor and restart Laravel queues
+# Configure Supervisor to monitor and restart Laravel queues
 COPY supervisord.conf /etc/supervisord.conf
 
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
@@ -48,6 +48,9 @@ RUN cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-availabl
 	
 # Setup working directory
 WORKDIR /var/www
+
+# Start Supervisor
+CMD ["/usr/bin/supervisord"]
 
 EXPOSE 80
 CMD ["apache2-foreground"]
