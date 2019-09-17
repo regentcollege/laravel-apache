@@ -51,7 +51,7 @@ RUN cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-availabl
 WORKDIR /var/www
 
 # Start Supervisor
-CMD ["/usr/bin/supervisord"]
+#CMD ["/usr/bin/supervisord"]
 
 EXPOSE 80
 CMD ["apache2-foreground"]
