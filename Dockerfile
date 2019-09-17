@@ -32,10 +32,11 @@ RUN docker-php-ext-install gd && docker-php-ext-enable opcache redis
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 
-# Configure Supervisor to monitor and restart Laravel queues
-COPY supervisord.conf /etc/supervisord.conf
+# Configure PHP for Laravel
+ADD laravel.ini /usr/local/etc/php/conf.d
 
-ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]
+# Configure Supervisor to monitor and restart Laravel queues
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
