@@ -39,6 +39,8 @@ COPY ./config/laravel.conf /etc/apache2/sites-available/laravel.conf
 COPY ./config/laravel.php.ini /etc/apache2/conf.d/laravel.php.ini
 COPY ./config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+RUN mkdir -p /var/www/apply/current/public
+
 RUN a2ensite laravel.conf && a2dissite 000-default.conf && a2enmod rewrite && service apache2 restart
 	
 # Setup working directory
