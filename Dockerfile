@@ -35,6 +35,10 @@ RUN docker-php-ext-install intl
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+COPY ./config/laravel.conf /etc/apache2/sites-available/laravel.conf
+COPY ./config/laravel.php.ini /etc/apache2/conf.d/laravel.php.ini
+COPY ./config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 RUN a2ensite laravel.conf && a2dissite 000-default.conf && a2enmod rewrite && service apache2 restart
 	
 # Setup working directory
