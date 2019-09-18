@@ -35,11 +35,7 @@ RUN docker-php-ext-install intl
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/laravel.conf && \
-    sed -i 's,/var/www/html,/var/www/apply/current/public,g' /etc/apache2/sites-available/laravel.conf && \
-    sed '/public/a <Directory \/var\/www\/apply\/current>\nAllowOverride All\n<\/Directory>' /etc/apache2/sites-available/laravel.conf && \
-    sed -i 's,${APACHE_LOG_DIR},/var/log/apache2,g' /etc/apache2/sites-available/laravel.conf && \
-    a2ensite laravel.conf && a2dissite 000-default.conf && a2enmod rewrite && service apache2 restart
+RUN a2ensite laravel.conf && a2dissite 000-default.conf && a2enmod rewrite && service apache2 restart
 	
 # Setup working directory
 WORKDIR /var/www
