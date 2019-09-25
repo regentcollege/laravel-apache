@@ -38,13 +38,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY ./config/laravel.conf /etc/apache2/sites-available/laravel.conf
 COPY ./config/laravel.php.ini /etc/apache2/conf.d/laravel.php.ini
 COPY ./config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY start.sh /usr/local/bin/start
 
 RUN mkdir -p /var/www/apply/current/public
 
-RUN a2ensite laravel.conf && a2dissite 000-default.conf && a2enmod rewrite && service apache2 restart
+RUN a2ensite laravel.conf && a2dissite 000-default.conf && chmod u+x /usr/local/bin/start && a2enmod rewrite
 	
 # Setup working directory
 WORKDIR /var/www
 
-EXPOSE 80
-CMD ["apache2-foreground"]
+CMD ["/usr/local/bin/start"]
