@@ -28,7 +28,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
 RUN docker-php-ext-install mysqli pdo_mysql zip exif pcntl opcache bcmath tokenizer
-RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install gd && docker-php-ext-enable opcache redis
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
