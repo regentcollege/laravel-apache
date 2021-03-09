@@ -1,5 +1,5 @@
 # Set the base image for subsequent instructions
-FROM php:7.4-apache
+FROM php:8-apache
 
 # Install dependencies
 RUN apt-get update && pecl install redis && apt-get install -y \
