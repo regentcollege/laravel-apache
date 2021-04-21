@@ -37,7 +37,7 @@ RUN docker-php-ext-install intl
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY ./config/laravel.conf /etc/apache2/sites-available/laravel.conf
-COPY ./config/laravel.php.ini /usr/local/etc/php/laravel.php.ini
+COPY ./config/laravel.php.ini /usr/local/etc/php/conf.d/laravel.php.ini
 COPY ./config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY start.sh /usr/local/bin/start
 
